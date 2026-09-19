@@ -1,5 +1,12 @@
+import { BrowserRouter } from "react-router-dom";
+import Router from "./config/Router";
+
 const App = () => {
-  return <h1>Oompa Loompa´s Crew</h1>;
+  return (
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
+  );
 };
 
 export default App;
