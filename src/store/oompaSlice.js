@@ -14,4 +14,5 @@ const oompaSlice = createSlice({
   },
 });
 
+export const { setItems } = oompaSlice.actions;
 export default oompaSlice;

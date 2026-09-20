@@ -1,9 +1,26 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getOompaCrew } from "../../api/oompaApi";
+import { useEffect } from "react";
+import { setItems } from "../../store/oompaSlice";
 
 const Home = () => {
   const items = useSelector((state) => state.oompas.items);
+  const dispatch = useDispatch();
 
-  return <h1>Home {items.length}</h1>;
+  useEffect(() => {
+    const fetchOompaCrew = async () => {
+      const list = await getOompaCrew();
+      dispatch(setItems(list.results));
+      console.log("list", list.results);
+    };
+    fetchOompaCrew();
+  }, []);
+
+  return (
+    <>
+      <h1>Home {items.length}</h1>
+    </>
+  );
 };
 
 export default Home;
