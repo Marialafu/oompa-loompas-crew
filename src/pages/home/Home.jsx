@@ -9,9 +9,8 @@ const Home = () => {
 
   useEffect(() => {
     const fetchOompaCrew = async () => {
-      const list = await getOompaCrew();
+      const list = await getOompaCrew(2);
       dispatch(setItems(list.results));
-      console.log("list", list.results);
     };
     fetchOompaCrew();
   }, []);
