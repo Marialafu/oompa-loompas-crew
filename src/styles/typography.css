@@ -1,0 +1,28 @@
+.title {
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+}
+
+.subtitle {
+  font-size: var(--font-size-subtitle);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-gray);
+  text-align: center;
+}
+
+.heading {
+  font-size: var(--font-size-heading);
+  font-weight: var(--font-weight-bold);
+}
+
+.body {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-regular);
+}
+
+.caption {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-gray);
+}
