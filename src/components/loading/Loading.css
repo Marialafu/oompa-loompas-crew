@@ -1,0 +1,20 @@
+.loading {
+  margin: 0 auto;
+}
+
+.loading-content {
+  width: 100%;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
