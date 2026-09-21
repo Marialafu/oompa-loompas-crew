@@ -12,11 +12,14 @@ const oompaSlice = createSlice({
     setItems: (state, action) => {
       state.items = action.payload;
     },
+    addItems: (state, action) => {
+      state.items = [...state.items, ...action.payload];
+    },
     setDetails: (state, action) => {
       state.details = action.payload;
     },
   },
 });
 
-export const { setItems, setDetails } = oompaSlice.actions;
+export const { setItems, addItems, setDetails } = oompaSlice.actions;
 export default oompaSlice;

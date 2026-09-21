@@ -1,8 +1,8 @@
 import "./Home.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getOompaCrew } from "../../api/oompaApi";
-import { useEffect } from "react";
-import { setItems } from "../../store/oompaSlice";
+import { useEffect, useRef, useState } from "react";
+import { addItems, setItems } from "../../store/oompaSlice";
 import Header from "../../components/header/Header";
 import OompaCard from "../../components/oompaCard/OompaCard";
 
@@ -10,13 +10,42 @@ const Home = () => {
   const oompas = useSelector((state) => state.oompas.items);
   const dispatch = useDispatch();
 
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(null);
+  const loadRef = useRef(null);
+
   useEffect(() => {
     const fetchOompaCrew = async () => {
-      const list = await getOompaCrew(1);
-      dispatch(setItems(list.results));
+      const crew = await getOompaCrew(1);
+      dispatch(setItems(crew.results));
+
+      setTotalPages(crew.total);
     };
     fetchOompaCrew();
   }, []);
+
+  useEffect(() => {
+    const loadObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        loadNextPage();
+      }
+    });
+    loadObserver.observe(loadRef.current);
+
+    return () => {
+      loadObserver.disconnect();
+    };
+  }, [page, totalPages]);
+
+  const loadNextPage = async () => {
+    if (page >= totalPages) return;
+
+    const nextPage = page + 1;
+    const newCrew = await getOompaCrew(nextPage);
+    dispatch(addItems(newCrew.results));
+
+    setPage(newCrew.current);
+  };
 
   return (
     <>
@@ -32,6 +61,7 @@ const Home = () => {
             <OompaCard key={oompa.id} {...oompa} />
           ))}
         </div>
+        <div ref={loadRef} />
       </main>
     </>
   );
