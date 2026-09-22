@@ -7,6 +7,7 @@ import Header from "../../components/header/Header";
 import OompaCard from "../../components/oompaCard/OompaCard";
 import Loading from "../../components/loading/Loading";
 import SearchBar from "../../components/searchBar/SearchBar";
+import { filterOompas } from "../../utils/filterOompas";
 
 const Home = () => {
   const oompas = useSelector((state) => state.oompas.items);
@@ -18,18 +19,7 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const loadRef = useRef(null);
 
-  const search = searchTerm?.toLowerCase();
-  const filteredOompas = oompas.filter((oompa) => {
-    const name = oompa.first_name.toLowerCase();
-    const lastname = oompa.last_name.toLowerCase();
-    const profession = oompa.profession.toLowerCase();
-
-    return (
-      name.includes(search) ||
-      lastname.includes(search) ||
-      profession.includes(search)
-    );
-  });
+  const filteredOompas = filterOompas(oompas, searchTerm);
 
   useEffect(() => {
     const fetchOompaCrew = async () => {
