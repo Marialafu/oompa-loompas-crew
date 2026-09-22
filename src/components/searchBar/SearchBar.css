@@ -1,0 +1,35 @@
+.search-bar {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+.search-bar-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.75rem;
+  padding: 12px 8px;
+  border-radius: 0.5rem;
+  border: 0.0625rem solid var(--color-gray);
+
+  &:focus-within {
+    border-color: var(--color-black);
+  }
+
+  & input {
+    border: none;
+    outline: none;
+    font: inherit;
+  }
+
+  & img {
+    height: 100%;
+  }
+}
+
+.divider {
+  height: 100%;
+  border-left: 0.0625rem solid var(--color-gray);
+}

@@ -6,6 +6,7 @@ import { addItems, setItems } from "../../store/oompaSlice";
 import Header from "../../components/header/Header";
 import OompaCard from "../../components/oompaCard/OompaCard";
 import Loading from "../../components/loading/Loading";
+import SearchBar from "../../components/searchBar/SearchBar";
 
 const Home = () => {
   const oompas = useSelector((state) => state.oompas.items);
@@ -46,7 +47,6 @@ const Home = () => {
     try {
       const nextPage = page + 1;
       const newCrew = await getOompaCrew(nextPage);
-      console.log(newCrew);
 
       dispatch(addItems(newCrew.results));
       setPage(newCrew.current);
@@ -59,6 +59,8 @@ const Home = () => {
     <>
       <Header />
       <main className="home-main">
+        <SearchBar />
+
         <section className="hero">
           <h1 className="title">Find your Oompa Loompa</h1>
           <h2 className="subtitle">There are more than 100k</h2>

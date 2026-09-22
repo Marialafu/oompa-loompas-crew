@@ -1,16 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const oompaSlice = createSlice({
-  name: "oompa",
+  name: "oompas",
   initialState: {
     items: [],
     details: [],
-    loading: false,
+    lastFetch: null,
     error: null,
   },
   reducers: {
     setItems: (state, action) => {
       state.items = action.payload;
+      state.lastFetch = Date.now();
     },
     addItems: (state, action) => {
       state.items = [...state.items, ...action.payload];
