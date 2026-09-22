@@ -18,7 +18,7 @@ const Home = () => {
     lastRequest,
   } = useSelector((state) => state.oompas);
 
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const loadRef = useRef(null);
@@ -27,14 +27,14 @@ const Home = () => {
 
   const loadNextPage = async () => {
     if (isLoading || currentPage >= totalPages) return;
-    setLoading(true);
+    setIsLoading(true);
 
     try {
       const nextPage = currentPage + 1;
       const newCrew = await getOompaCrew(nextPage);
       dispatch(addItems(newCrew));
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -43,8 +43,14 @@ const Home = () => {
     if (!requestExpired) return;
 
     const fetchOompaCrew = async () => {
-      const crew = await getOompaCrew(1);
-      dispatch(setItemsData(crew));
+      setIsLoading(true);
+
+      try {
+        const crew = await getOompaCrew(1);
+        dispatch(setItemsData(crew));
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchOompaCrew();
   }, []);

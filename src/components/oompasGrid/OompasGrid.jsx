@@ -5,11 +5,17 @@ import "./OompasGrid.css";
 const OompasGrid = ({ oompas, isLoading, loadRef }) => {
   return (
     <section className="oompas-crew">
-      <div className="oompas-grid">
-        {oompas.map((oompa) => (
-          <OompaCard key={oompa.id} {...oompa} />
-        ))}
-      </div>
+      {oompas.length > 0 ? (
+        <div className="oompas-grid">
+          {oompas.map((oompa) => (
+            <OompaCard key={oompa.id} {...oompa} />
+          ))}
+        </div>
+      ) : (
+        <p className="body empty-message">
+          Ninguno de nuestros Oompas coincide con tu búsqueda. Prueba con otra.
+        </p>
+      )}
 
       {isLoading && <Loading />}
       <div ref={loadRef} />

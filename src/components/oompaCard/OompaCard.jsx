@@ -8,10 +8,7 @@ const OompaCard = ({ id, image, first_name, gender, profession }) => {
         <img className="oompa-card-image" src={image} alt={first_name} />
 
         <div className="oompa-card-content">
-          <h3 className="heading">
-            {first_name}
-            {id}
-          </h3>
+          <h3 className="heading">{first_name}</h3>
           <span className="caption">{gender}</span>
           <span className="caption">{profession}</span>
         </div>
