@@ -15,19 +15,34 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const loadRef = useRef(null);
+
+  const search = searchTerm?.toLowerCase();
+  const filteredOompas = oompas.filter((oompa) => {
+    const name = oompa.first_name.toLowerCase();
+    const lastname = oompa.last_name.toLowerCase();
+    const profession = oompa.profession.toLowerCase();
+
+    return (
+      name.includes(search) ||
+      lastname.includes(search) ||
+      profession.includes(search)
+    );
+  });
 
   useEffect(() => {
     const fetchOompaCrew = async () => {
       const crew = await getOompaCrew(1);
       dispatch(setItems(crew.results));
-      setPage(crew.current);
       setTotalPages(crew.total);
     };
     fetchOompaCrew();
   }, []);
 
   useEffect(() => {
+    if (searchTerm || totalPages === null) return;
+
     const loadObserver = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
         loadNextPage();
@@ -38,7 +53,7 @@ const Home = () => {
     return () => {
       loadObserver.disconnect();
     };
-  }, [page, totalPages, isLoading]);
+  }, [page, totalPages, isLoading, searchTerm]);
 
   const loadNextPage = async () => {
     if (isLoading || page >= totalPages) return;
@@ -59,7 +74,7 @@ const Home = () => {
     <>
       <Header />
       <main className="home-main">
-        <SearchBar />
+        <SearchBar setSearchTerm={setSearchTerm} />
 
         <section className="hero">
           <h1 className="title">Find your Oompa Loompa</h1>
@@ -68,7 +83,7 @@ const Home = () => {
 
         <div className="oompas-crew">
           <div className="oompas-grid">
-            {oompas.map((oompa) => (
+            {filteredOompas.map((oompa) => (
               <OompaCard key={oompa.id} {...oompa} />
             ))}
           </div>
