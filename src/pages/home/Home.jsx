@@ -4,10 +4,9 @@ import { getOompaCrew } from "../../api/oompaApi";
 import { useEffect, useRef, useState } from "react";
 import { addItems, setItems } from "../../store/oompaSlice";
 import Header from "../../components/header/Header";
-import OompaCard from "../../components/oompaCard/OompaCard";
-import Loading from "../../components/loading/Loading";
 import SearchBar from "../../components/searchBar/SearchBar";
 import { filterOompas } from "../../utils/filterOompas";
+import OompasGrid from "../../components/oompasGrid/OompasGrid";
 
 const Home = () => {
   const oompas = useSelector((state) => state.oompas.items);
@@ -15,6 +14,7 @@ const Home = () => {
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
+
   const [isLoading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const loadRef = useRef(null);
@@ -71,16 +71,11 @@ const Home = () => {
           <h2 className="subtitle">There are more than 100k</h2>
         </section>
 
-        <div className="oompas-crew">
-          <div className="oompas-grid">
-            {filteredOompas.map((oompa) => (
-              <OompaCard key={oompa.id} {...oompa} />
-            ))}
-          </div>
-
-          {isLoading && <Loading />}
-          <div ref={loadRef} />
-        </div>
+        <OompasGrid
+          oompas={filteredOompas}
+          isLoading={isLoading}
+          loadRef={loadRef}
+        />
       </main>
     </>
   );
