@@ -1,31 +1,50 @@
 import "./Home.css";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOompaCrew } from "../../api/oompaApi";
-import { useEffect, useRef, useState } from "react";
-import { addItems, setItems } from "../../store/oompaSlice";
+import { addItems, setItemsData } from "../../store/oompaSlice";
+import { isRequestExpired } from "../../utils/isRequestExpired";
+import { filterOompas } from "../../utils/filterOompas";
 import Header from "../../components/header/Header";
 import SearchBar from "../../components/searchBar/SearchBar";
-import { filterOompas } from "../../utils/filterOompas";
 import OompasGrid from "../../components/oompasGrid/OompasGrid";
 
 const Home = () => {
-  const oompas = useSelector((state) => state.oompas.items);
   const dispatch = useDispatch();
-
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(null);
+  const {
+    items: oompas,
+    currentPage,
+    totalPages,
+    lastRequest,
+  } = useSelector((state) => state.oompas);
 
   const [isLoading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
   const loadRef = useRef(null);
 
   const filteredOompas = filterOompas(oompas, searchTerm);
 
+  const loadNextPage = async () => {
+    if (isLoading || currentPage >= totalPages) return;
+    setLoading(true);
+
+    try {
+      const nextPage = currentPage + 1;
+      const newCrew = await getOompaCrew(nextPage);
+      dispatch(addItems(newCrew));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
+    const requestExpired = isRequestExpired(lastRequest);
+    if (!requestExpired) return;
+
     const fetchOompaCrew = async () => {
       const crew = await getOompaCrew(1);
-      dispatch(setItems(crew.results));
-      setTotalPages(crew.total);
+      dispatch(setItemsData(crew));
     };
     fetchOompaCrew();
   }, []);
@@ -43,22 +62,7 @@ const Home = () => {
     return () => {
       loadObserver.disconnect();
     };
-  }, [page, totalPages, isLoading, searchTerm]);
-
-  const loadNextPage = async () => {
-    if (isLoading || page >= totalPages) return;
-    setLoading(true);
-
-    try {
-      const nextPage = page + 1;
-      const newCrew = await getOompaCrew(nextPage);
-
-      dispatch(addItems(newCrew.results));
-      setPage(newCrew.current);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [currentPage, totalPages, isLoading, searchTerm]);
 
   return (
     <>
