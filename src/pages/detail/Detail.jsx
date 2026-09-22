@@ -17,6 +17,7 @@ const Detail = () => {
   const oompa = detail?.data;
 
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const requestExpired = isRequestExpired(detail?.lastRequest);
@@ -24,10 +25,13 @@ const Detail = () => {
 
     const fetchOompaDetail = async () => {
       setIsLoading(true);
+      setError(null);
 
       try {
         const oompa = await getOompaById(id);
         dispatch(setDetails({ id, oompa }));
+      } catch (error) {
+        setError("Error al cargar el Oompa Loompa");
       } finally {
         setIsLoading(false);
       }
@@ -35,35 +39,46 @@ const Detail = () => {
     fetchOompaDetail();
   }, [id]);
 
+  const content = () => {
+    if (error) {
+      return <p className="body">{error}</p>;
+    }
+
+    if (isLoading) {
+      return <Loading />;
+    }
+
+    return (
+      <>
+        <div>
+          <img
+            src={oompa?.image}
+            alt={`${oompa?.first_name} ${oompa?.last_name}`}
+          />
+        </div>
+
+        <div className="detail-content">
+          <div className="detail-info">
+            <h3 className="heading oompa-card-hover">
+              {oompa?.first_name} {oompa?.last_name}
+            </h3>
+            <span className="caption">{oompa?.gender}</span>
+            <span className="caption">{oompa?.profession}</span>
+          </div>
+
+          <div
+            className="body detail-description"
+            dangerouslySetInnerHTML={{ __html: oompa?.description }}
+          />
+        </div>
+      </>
+    );
+  };
+
   return (
     <>
       <Header />
-      <main className="detail-main">
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <>
-            <div>
-              <img src={oompa?.image} alt="nombre" />
-            </div>
-
-            <div className="detail-content">
-              <div className="detail-info">
-                <h3 className="heading oompa-card-hover">
-                  {oompa?.first_name}
-                </h3>
-                <span className="caption">{oompa?.gender}</span>
-                <span className="caption">{oompa?.profession}</span>
-              </div>
-
-              <div
-                className="body detail-description"
-                dangerouslySetInnerHTML={{ __html: oompa?.description }}
-              />
-            </div>
-          </>
-        )}
-      </main>
+      <main className="detail-main">{content()}</main>
     </>
   );
 };

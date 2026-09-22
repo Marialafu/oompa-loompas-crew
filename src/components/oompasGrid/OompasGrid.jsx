@@ -2,16 +2,18 @@ import OompaCard from "../oompaCard/OompaCard";
 import Loading from "../loading/Loading";
 import "./OompasGrid.css";
 
-const OompasGrid = ({ oompas, isLoading, loadRef }) => {
+const OompasGrid = ({ oompas, isLoading, loadRef, searchTerm }) => {
+  const isEmptySearch = !isLoading && oompas.length === 0;
+
   return (
     <section className="oompas-crew">
-      {oompas.length > 0 ? (
-        <div className="oompas-grid">
-          {oompas.map((oompa) => (
-            <OompaCard key={oompa.id} {...oompa} />
-          ))}
-        </div>
-      ) : (
+      <div className="oompas-grid">
+        {oompas?.map((oompa) => (
+          <OompaCard key={oompa?.id} {...oompa} />
+        ))}
+      </div>
+
+      {isEmptySearch && (
         <p className="body empty-message">
           Ninguno de nuestros Oompas coincide con tu búsqueda. Prueba con otra.
         </p>

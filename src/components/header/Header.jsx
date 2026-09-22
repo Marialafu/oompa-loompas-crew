@@ -9,7 +9,7 @@ const Header = () => {
           <img
             className="header-logo-image"
             src="/images/logo-umpa-loompa.webp"
-            alt="Oompa Loompa's Crew Home"
+            alt="Oompa Loompa's Crew"
           />
         </Link>
 

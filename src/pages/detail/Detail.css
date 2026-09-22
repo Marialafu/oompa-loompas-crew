@@ -1,6 +1,7 @@
 .detail-main {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 2rem;
   padding: 2rem 1rem;
   width: 100%;

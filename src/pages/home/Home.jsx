@@ -19,6 +19,7 @@ const Home = () => {
   } = useSelector((state) => state.oompas);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const loadRef = useRef(null);
@@ -28,11 +29,14 @@ const Home = () => {
   const loadNextPage = async () => {
     if (isLoading || currentPage >= totalPages) return;
     setIsLoading(true);
+    setError(null);
 
     try {
       const nextPage = currentPage + 1;
       const newCrew = await getOompaCrew(nextPage);
       dispatch(addItems(newCrew));
+    } catch (error) {
+      setError("Error al cargar más Oompa Loompas. Prueba más tarde.");
     } finally {
       setIsLoading(false);
     }
@@ -44,10 +48,13 @@ const Home = () => {
 
     const fetchOompaCrew = async () => {
       setIsLoading(true);
+      setError(null);
 
       try {
         const crew = await getOompaCrew(1);
         dispatch(setItemsData(crew));
+      } catch (error) {
+        setError("Error cargando Oompa Loompas. Prueba más tarde.");
       } finally {
         setIsLoading(false);
       }
@@ -81,11 +88,16 @@ const Home = () => {
           <h2 className="subtitle">There are more than 100k</h2>
         </section>
 
-        <OompasGrid
-          oompas={filteredOompas}
-          isLoading={isLoading}
-          loadRef={loadRef}
-        />
+        {error ? (
+          <p className="body">{error}</p>
+        ) : (
+          <OompasGrid
+            oompas={filteredOompas}
+            isLoading={isLoading}
+            loadRef={loadRef}
+            searchTerm={searchTerm}
+          />
+        )}
       </main>
     </>
   );

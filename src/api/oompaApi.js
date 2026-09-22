@@ -7,10 +7,15 @@ const getOompaCrew = async (page) => {
       method: "GET",
     });
 
+    if (!response.ok) {
+      throw new Error("Error loading Oompa Loompas");
+    }
+
     const oompaCrew = await response.json();
     return oompaCrew;
   } catch (error) {
     console.error("Error in getOompaCrew", error.message);
+    throw error;
   }
 };
 
@@ -20,10 +25,15 @@ const getOompaById = async (id) => {
       method: "GET",
     });
 
+    if (!response.ok) {
+      throw new Error("Error loading Oompa Loompas");
+    }
+
     const oompa = await response.json();
     return oompa;
   } catch (error) {
     console.error("Error getting Oompa by ID", error.message);
+    throw error;
   }
 };
 
