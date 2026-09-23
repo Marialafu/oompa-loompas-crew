@@ -35,7 +35,7 @@ const Home = () => {
       const nextPage = currentPage + 1;
       const newCrew = await getOompaCrew(nextPage);
       dispatch(addItems(newCrew));
-    } catch (error) {
+    } catch {
       setError("Error al cargar más Oompa Loompas. Prueba más tarde.");
     } finally {
       setIsLoading(false);
@@ -53,7 +53,7 @@ const Home = () => {
       try {
         const crew = await getOompaCrew(1);
         dispatch(setItemsData(crew));
-      } catch (error) {
+      } catch {
         setError("Error cargando Oompa Loompas. Prueba más tarde.");
       } finally {
         setIsLoading(false);
@@ -95,7 +95,6 @@ const Home = () => {
             oompas={filteredOompas}
             isLoading={isLoading}
             loadRef={loadRef}
-            searchTerm={searchTerm}
           />
         )}
       </main>

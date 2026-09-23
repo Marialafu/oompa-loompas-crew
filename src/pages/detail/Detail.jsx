@@ -30,7 +30,7 @@ const Detail = () => {
       try {
         const oompa = await getOompaById(id);
         dispatch(setDetails({ id, oompa }));
-      } catch (error) {
+      } catch {
         setError("Error al cargar el Oompa Loompa");
       } finally {
         setIsLoading(false);
